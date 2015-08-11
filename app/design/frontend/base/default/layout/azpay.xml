@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<layout>
+
+    <!-- checkout onepage handles -->
+    <azpay_checkout_handle>
+        <reference name="head">
+            <action method="addCss" ifconfig="payment/azpay_cc/active">
+                <stylesheet>azpay/css/styles.css</stylesheet>
+            </action>
+            <!--
+            <action method="addItem" ifconfig="payment/azpay_cc/active">
+                <type>skin_js</type>
+                <name>azpay/js/validation.js</name>
+            </action>
+            -->
+        </reference>
+    </azpay_checkout_handle>
+
+    <checkout_onepage_index>
+        <update handle="azpay_checkout_handle"/>
+    </checkout_onepage_index>
+
+    <onepagecheckout_index_index>
+        <update handle="azpay_checkout_handle"/>
+    </onepagecheckout_index_index>
+
+    <opc_index_index>
+        <update handle="azpay_checkout_handle"/>
+    </opc_index_index>
+
+    <aw_onestepcheckout_index_index>
+        <update handle="azpay_checkout_handle"/>
+    </aw_onestepcheckout_index_index>
+
+    <onestepcheckout_index_index>
+        <update handle="azpay_checkout_handle"/>
+    </onestepcheckout_index_index>
+    <!-- checkout onepage handles -->
+
+    <!-- checkout onepage success handles -->
+    <azpay_checkout_success_handle>
+        <reference name="checkout.success">
+            <block type="azpay/checkout_success_payment" name="azpay_checkout_success_payment">
+                <action method="addPaymentRender">
+                    <type>azpay_boleto</type>
+                    <block>azpay/checkout_success_payment_boleto</block>
+                    <template>azpay/checkout/success/payment/boleto.phtml</template>
+                </action>
+            </block>
+        </reference>
+    </azpay_checkout_success_handle>
+
+    <checkout_onepage_success>
+        <update handle="azpay_checkout_success_handle"/>
+    </checkout_onepage_success>
+    <!-- checkout onepage success handles -->
+
+</layout>

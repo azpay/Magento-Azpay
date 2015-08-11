@@ -1,0 +1,12 @@
+
+<?php echo $this->htmlEscape($this->getMethod()->getTitle()) ?>
+
+<?php if($this->getAzpayTransactionId()): ?>
+<br /> AZPay TID: <?php echo $this->getAzpayTransactionId() ?>
+<?php endif ?>
+<?php if($this->getBoletoUrl()): ?>
+<br />
+<a href="<?php echo $this->getBoletoUrl() ?>" target="_blank"><?php echo $this->__('Clique aqui para imprimir o seu Boleto') ?></a>
+<?php endif ?>
+
+<?php echo $this->getChildHtml()?>

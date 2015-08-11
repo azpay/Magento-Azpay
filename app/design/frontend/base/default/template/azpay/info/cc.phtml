@@ -1,0 +1,7 @@
+<?php echo $this->htmlEscape($this->getMethod()->getTitle()) ?>
+
+<?php if($this->getAzpayTransactionId()): ?>
+<br /> AZPay TID: <?php echo $this->getAzpayTransactionId() ?>
+<?php endif ?>
+
+<?php echo $this->getChildHtml()?>

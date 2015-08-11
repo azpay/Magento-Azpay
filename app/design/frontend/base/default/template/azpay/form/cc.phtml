@@ -1,0 +1,84 @@
+<?php $_code = $this->getMethodCode(); ?>
+<ul class="form-list azpay-payment-icons" id="<?php echo $_code ?>_types">
+    <?php foreach ($this->getCcAvailableTypes() as $_type): ?>
+        <li class="<?php echo $_type['value'] ?> on">
+            <span><?php echo $_type['label'] ?></span>
+        </li>
+    <?php endforeach ?>
+</ul>
+<br />
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+    <li>
+        <label for="<?php echo $_code ?>_cc_type"><?php echo $this->__('Credit Card Type') ?> </label><br />
+        <div class="input-box">
+            <select id="<?php echo $_code ?>_cc_type" name="payment[cc_type]" title="<?php echo $this->__('Credit Card Type') ?>" class="required-entry validate-select">
+                <option value=""><?php echo $this->__('--Please Select--') ?></option>
+                <?php foreach ($this->getCcAvailableTypes() as $_type): ?>
+                    <option value="<?php echo $_type['value'] ?>"><?php echo $_type['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </li>
+    <li>
+        <label for="<?php echo $_code ?>_installments"><?php echo $this->__('Parcelas') ?> </label><br />
+        <div class="input-box">
+            <select id="<?php echo $_code ?>_installments" name="payment[installments]" title="<?php echo $this->__('Installments') ?>" class="required-entry validate-select">
+                <option value=""><?php echo $this->__('--Please Select--') ?></option>
+                <?php foreach ($this->getInstallmentsAvailables() as $parcela): ?>
+                    <option value="<?php echo $parcela['parcela'] ?>"><?php echo $parcela['label'] ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </li>  
+    <li>
+        <label for="<?php echo $_code ?>_cc_number" class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
+        <div class="input-box">
+            <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text azpay-only-number required-entry validate-azpay-cc-number" maxlength="19" value="" />
+        </div>
+    </li>
+    <li>
+        <label for="<?php echo $_code ?>_cc_owner" class="required"><em>*</em><?php echo $this->__('Name on Card') ?></label>
+        <div class="input-box">
+            <input type="text" title="<?php echo $this->__('Name on Card') ?>" name="payment[cc_owner]" class="input-text required-entry" id="<?php echo $_code ?>_cc_owner" value="" />
+        </div>
+    </li>
+    <li>
+        <label for="<?php echo $_code ?>_expiration" class="required"><em>*</em><?php echo $this->__('Expiration Date') ?></label>
+        <div class="input-box">
+            <div class="v-fix azpay-cc-expr-month">
+                <select id="<?php echo $_code ?>_cc_exp_month" name="payment[cc_exp_month]" class="month validate-azpay-cc-exp">
+                <option value=""><?php echo  $this->__('Month'); ?></option>
+                    <?php foreach ($this->getCcMonths() as $k => $v): ?>
+                        <option value="<?php echo $v ?>"><?php echo $v ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <div class="v-fix azpay-cc-expr-year">
+                <!--
+                <span>/</span>
+                -->
+                <select id="<?php echo $_code ?>_cc_exp_year" name="payment[cc_exp_year]" class="year">
+                    <?php foreach ($this->getCcYears() as $k => $v): ?>
+                        <option value="<?php echo $k ? $k : '' ?>"><?php echo $v ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+    </li>
+    <?php echo $this->getChildHtml() ?>
+    <?php if ($this->hasVerification()): ?>
+        <li>
+            <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?></label>
+            <div class="input-box">
+                <div class="v-fix azpay-cvv">
+                    <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" class="input-text azpay-only-number cvv required-entry validate-azpay-cc-cvn" id="<?php echo $_code ?>_cc_cid" maxlength="4" value="" />
+                    <div class="azpay-cvv-tool-tip">
+                        <img src="<?php echo $this->getSkinUrl('azpay/images/icon_cvv.gif') ?>" class="azpay-cvv-icon" />
+                        <div class="azpay-cvv-image"><img src="<?php echo $this->getSkinUrl('azpay/images/cvv.gif') ?>" alt="<?php echo $this->__('Card Verification Number Visual Reference') ?>" title="<?php echo $this->__('Card Verification Number Visual Reference') ?>" /></div>
+                        <span class="azpay-cvv-tool-tip-arrow">&nbsp;</span>
+                    </div>
+                </div>
+            </div>
+        </li>
+    <?php endif; ?>
+</ul>

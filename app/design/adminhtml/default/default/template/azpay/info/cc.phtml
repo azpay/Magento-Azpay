@@ -1,0 +1,7 @@
+<?php echo $this->htmlEscape($this->getMethod()->getTitle()) ?>
+
+<?php if ($_info = $this->getInfo()):?>
+<br /><?php echo $this->escapeHtml($this->getInstallmentDescription()) ?>
+<?php endif;?>
+
+<?php echo $this->getChildHtml()?>
