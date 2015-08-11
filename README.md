@@ -13,5 +13,4 @@ Esta instalação não afetará nenhum arquivo do seu sistema, somente adicionar
 
 5. Selecione a opção Azpay e preencha as informações necessárias para o funcionamento.
 
-<h2>Developer</h2>
 Plugin criado por <a href="https://github.com/albertobraschi" target="_blank">Alberto Braschi</a>.
