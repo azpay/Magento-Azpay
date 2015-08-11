@@ -12,3 +12,6 @@ Esta instalação não afetará nenhum arquivo do seu sistema, somente adicionar
 4. Para acessar e configurar o módulo acesse o menu System -> Configuration -> Payment methods / Sistema -> Configurações -> Métodos de pagamento
 
 5. Selecione a opção Azpay e preencha as informações necessárias para o funcionamento.
+
+<h2>Developer</h2>
+Plugin criado por <a href="https://github.com/albertobraschi" target="_blank">Alberto Braschi</a>.
