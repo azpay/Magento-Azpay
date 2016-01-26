@@ -12,6 +12,10 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
     protected $_canUseForMultishipping = false;
     protected $_isInitializeNeeded = true;
 
+    const REQUEST_TYPE_AUTH_CAPTURE = 'AUTH_CAPTURE';
+    const REQUEST_TYPE_AUTH_ONLY = 'AUTH_ONLY';
+    const REQUEST_TYPE_CAPTURE_ONLY = 'CAPTURE_ONLY';
+
     public function assignData($data) {
         if (!($data instanceof Varien_Object)) {
             $data = new Varien_Object($data);
@@ -27,20 +31,18 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
                 ->setCcLast4(Mage::helper('core')->encrypt($ccLast4))
                 ->setCcCid(Mage::helper('core')->encrypt($data->getCcCid()));
         $info->setInstallments($data->getInstallments());
-        
-        
-        
         return $this;
     }
 
     public function initialize($paymentAction, $stateObject) {
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
-        $this->_place($payment, $order->getBaseTotalDue());
+        $this->_place($payment, $order->getBaseTotalDue(),$paymentAction);
         return $this;
     }
 
-    public function _place(Varien_Object $payment, $amount) {
+
+    public function _place(Varien_Object $payment, $amount, $requestType) {
 
         try {
 
@@ -73,9 +75,15 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
 
             if ($this->getConfigData('log')) {
                 Mage::log($azpay, null, "azpay_cc.log");
+            }            
+
+            if ($requestType == "authorize") {
+                // Execute Authorization - Prepare authorization to transaction
+                $azpay->authorize()->execute();
+            } elseif ($requestType == "authorize_capture") {
+                // Execute Sale - Prepare authorization and capture (direct sale), to transaction
+                $azpay->sale()->execute();
             }
-            // Execute Sale
-            $azpay->sale()->execute();
         } catch (AZPay_Error $e) {
             Mage::log($e->getMessage(), null, "azpay_cc_error.log");
             $error = $azpay->responseError();
@@ -85,8 +93,9 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
         // Response
         $gateway_response = $azpay->response();
 
+
         if ($gateway_response->status != Config::$STATUS['APPROVED']) {
-       //      return Mage::throwException('Pagamento não Autorizado');
+            //      return Mage::throwException('Pagamento não Autorizado');
         }
 
         // azpay info
