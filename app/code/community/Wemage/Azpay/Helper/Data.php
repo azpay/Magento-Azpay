@@ -1,8 +1,17 @@
 <?php
 
-class Wemage_Azpay_Helper_Data extends Mage_Core_Helper_Abstract
-{
+class Wemage_Azpay_Helper_Data extends Mage_Core_Helper_Abstract {
 
+    public function getOrderIdByTransactionId($tid) {
+        $resource = Mage::getSingleton('core/resource');
+        $conn = $resource->getConnection('core_read');
+        $select = $conn->select()
+                ->from($resource->getTableName('sales/order_payment'))
+                ->where('azpay_transaction_id = ?', $tid)
+                ->reset(Zend_Db_Select::COLUMNS)
+                ->columns('parent_id');
+        return $conn->fetchOne($select);
+    }
 
     public function formatAmount($amount) {
         return number_format($amount, 2, '', '');
@@ -28,6 +37,5 @@ class Wemage_Azpay_Helper_Data extends Mage_Core_Helper_Abstract
         $merchantKey = Mage::getStoreConfig('payment/azpay_setting/merchant_key');
         return $merchantKey;
     }
-
 
 }

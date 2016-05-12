@@ -103,7 +103,7 @@ class XML_Requests {
 
         $this->xml_writer->writeElement('customerIdentity', $billing['customerIdentity']);
         $this->xml_writer->writeElement('name', $billing['name']);
-        $this->xml_writer->writeElement('address', $billing['address']);
+        $this->xml_writer->writeElement('address', $billing['address'] . ', ' . $billing['addressNumber']);
         $this->xml_writer->writeElement('address2', $billing['address2']);
         $this->xml_writer->writeElement('city', $billing['city']);
         $this->xml_writer->writeElement('state', $billing['state']);
@@ -125,7 +125,7 @@ class XML_Requests {
      * @param  array $options    [Options data]
      * @return void
      */
-    public function authorizeXml($merchant, $order, $payments, $billing, $options) {
+    public function authorizeXml($merchant, $order, $payments, $billing, $options, $product) {
 
         $this->header();
 
@@ -141,6 +141,9 @@ class XML_Requests {
 
         $this->xml_writer->writeElement('urlReturn', $options['urlReturn']);
         $this->xml_writer->writeElement('fraud', $options['fraud']);
+        if ($options['fraud']) {
+            $this->fraudXml($billing, $options, $product);
+        }
         $this->xml_writer->writeElement('customField', $options['customField']);
 
         $this->xml_writer->endElement();
@@ -487,7 +490,7 @@ class XML_Requests {
 
         $this->xml_writer->writeElement('customerIdentity', $billing['customerIdentity']);
         $this->xml_writer->writeElement('name', $billing['name']);
-        $this->xml_writer->writeElement('address', $billing['address']);
+        $this->xml_writer->writeElement('address', $billing['address'] . ', ' . $billing['addressNumber']);
         $this->xml_writer->writeElement('address2', $billing['address2']);
         $this->xml_writer->writeElement('city', $billing['city']);
         $this->xml_writer->writeElement('state', $billing['state']);
@@ -498,6 +501,79 @@ class XML_Requests {
         $this->xml_writer->writeElement('birthDate', $billing['birthDate']);
         $this->xml_writer->writeElement('cpf', $billing['cpf']);
 
+        $this->xml_writer->endElement();
+    }
+
+    /**
+     * PagSeguro XML
+     *
+     * @param  array $merchant [Merchant data]
+     * @param  array $order    [Order data]
+     * @param  array $payment  [Payment data]
+     * @param  array $billing  [Billing data]
+     * @param  array $options  [Options data]
+     * @return void
+     */
+    public function fraudXml($billing, $options, $product) {
+
+        $this->xml_writer->startElement('fraudData');
+
+        $this->billingFraud($billing, $options);
+
+        $this->productFraudNode($product);
+
+        $this->xml_writer->endElement();
+    }
+
+    /**
+     * PagSeguro Checkout billing node
+     *
+     * @param  array $billing [Billing data]
+     * @return void
+     */
+    private function billingFraud($billing, $options) {
+
+        $this->xml_writer->writeElement('operator', 'clearsale');
+        $this->xml_writer->writeElement('method', 'start');
+        $this->xml_writer->writeElement('costumerIP', $options['costumerIP']);
+        $this->xml_writer->writeElement('document', $billing['customerIdentity']);
+        $this->xml_writer->writeElement('name', $billing['name']);
+        $this->xml_writer->writeElement('address', $billing['address']);
+        $this->xml_writer->writeElement('addressNumber', $billing['addressNumber']);
+        $this->xml_writer->writeElement('address2', $billing['address2']);
+        $this->xml_writer->writeElement('city', $billing['city']);
+        $this->xml_writer->writeElement('state', $billing['state']);
+        $this->xml_writer->writeElement('postalCode', Utils::formatNumber($billing['postalCode']));
+        $this->xml_writer->writeElement('country', $billing['country']);
+        $this->xml_writer->writeElement('phonePrefix', Utils::formatNumber($billing['phonePrefix']));
+        $this->xml_writer->writeElement('phoneNumber', Utils::formatNumber($billing['phoneNumber']));
+        $this->xml_writer->writeElement('email', $billing['email']);
+    }
+
+    /**
+     * Product nodes
+     *
+     * @param  array $product
+     * @return void
+     */
+    public function productFraudNode($product) {
+
+        $this->xml_writer->startElement('itens');
+        if (isset($payments[0]) && is_array($payments[0])) {
+            foreach ($product as $key => $product) {
+                $this->xml_writer->startElement('item');
+                $this->xml_writer->writeElement('productName', $product['productName']);
+                $this->xml_writer->writeElement('quantity', $product['quantity']);
+                $this->xml_writer->writeElement('price', $product['price']);
+                $this->xml_writer->endElement();
+            }
+        } else {
+            $this->xml_writer->startElement('item');
+            $this->xml_writer->writeElement('productName', $product['productName']);
+            $this->xml_writer->writeElement('quantity', $product['quantity']);
+            $this->xml_writer->writeElement('price', Utils::formatNumber($product['price']));
+            $this->xml_writer->endElement();
+        }
         $this->xml_writer->endElement();
     }
 

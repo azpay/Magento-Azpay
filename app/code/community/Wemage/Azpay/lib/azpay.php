@@ -60,13 +60,26 @@ class AZPay {
         'customerIdentity' => '',
         'name' => '',
         'address' => '',
+        'addressNumber' => '',
         'address2' => '',
         'city' => '',
         'state' => '',
         'postalCode' => '',
         'country' => 'BR',
-        'phone' => '',
+        'phonePrefix' => '',
+        'phoneNumber' => '',
         'email' => ''
+    );
+    
+    /**
+     * Product Details
+     *
+     * @var array
+     */
+    public $config_product = array(
+        'productName' => '',
+        'quantity' => '',
+        'price' => ''
     );
 
     /**
@@ -276,6 +289,8 @@ class AZPay {
         // Init cURL
         $ch = curl_init();
 
+
+
         // Config cURL
         curl_setopt($ch, CURLOPT_URL, Config::$RECEIVER_URL);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -283,6 +298,9 @@ class AZPay {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->curl_timeout);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+
 
         $this->curl_response = curl_exec($ch);
         $this->curl_response_meta = curl_getinfo($ch);
@@ -452,7 +470,9 @@ class AZPay {
 
         $requests = new XML_Requests();
 
-        $requests->authorizeXml($this->merchant, $this->config_order, $this->config_card_payments, $this->config_billing, $this->config_options);
+
+        $requests->authorizeXml($this->merchant, $this->config_order, $this->config_card_payments, $this->config_billing, $this->config_options, $this->config_product);
+
         $this->xml = $requests->output();
 
         return $this;

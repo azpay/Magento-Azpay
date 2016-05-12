@@ -40,12 +40,15 @@ class Wemage_Azpay_Model_Boleto extends Wemage_Azpay_Model_Api {
             $azpay->config_billing['postalCode'] = Zend_Filter::filterStatic($billingAddress->getPostcode(), 'Digits');
             $azpay->config_billing['phone'] = Mage::helper('azpay')->splitTelephone($billingAddress->getTelephone());
             $azpay->config_billing['email'] = $order->getCustomerEmail();
-            // Log
-            if ($this->getConfigData('log')) { Mage::log($azpay, null, "azpay_boleto.log");            }
+            $azpay->config_options['urlReturn'] = Mage::getUrl('azpay/transaction_boleto/postback');
+
             // Execute
             $azpay->boleto()->execute();
-
-
+            $azpay->getXml(); // usado para salvar o XML gerado no log
+            // Log
+            if ($this->getConfigData('log')) {
+                Mage::log($azpay, null, "azpay_boleto.log");
+            }
         } catch (AZPay_Error $e) {
             Mage::log($e->getMessage(), null, "azpay_boleto_error.log");
             $error = $azpay->responseError();
