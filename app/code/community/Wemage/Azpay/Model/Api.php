@@ -2,9 +2,6 @@
 
 require_once(Mage::getModuleDir('','Wemage_Azpay').'/lib/azpay.php');
 
-/*var_dump(Mage::getUrl('azpay'));
-exit;*/
-
 class Wemage_Azpay_Model_Api extends  Mage_Payment_Model_Method_Abstract  {
 
     protected $_merchantId;

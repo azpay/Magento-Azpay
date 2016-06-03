@@ -46,14 +46,18 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
     public function _place(Varien_Object $payment, $amount, $requestType) {
 
         try {
+
             $order = $payment->getOrder();
+            $billingAddress = $order->getBillingAddress();
+            $parcels = $payment->getInstallments();
+
+            //AZPay config
             $azpay = new AZPay($this->_merchantId, $this->_merchantKey);
             $azpay->curl_timeout = 60;
             $azpay->config_order['reference'] = $order->getRealOrderId();
             $azpay->config_order['totalAmount'] = Mage::helper('azpay')->formatAmount($amount);
             $azpay->config_options['urlReturn'] = Mage::getUrl('azpay/transaction_cc/postback');
             $azpay->config_card_payments['amount'] = Mage::helper('azpay')->formatAmount($amount);
-            $parcels = $payment->getInstallments();
             $azpay->config_card_payments['acquirer'] = $this->getConfigData('acquirer');
             $azpay->config_card_payments['method'] = ($parcels == '1') ? 1 : 2;
             $azpay->config_card_payments['flag'] = $payment->getCcType();
@@ -62,7 +66,6 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
             $azpay->config_card_payments['cardNumber'] = Mage::helper('core')->decrypt($payment->getCcNumber());
             $azpay->config_card_payments['cardSecurityCode'] = Mage::helper('core')->decrypt($payment->getCcCid());
             $azpay->config_card_payments['cardExpirationDate'] = $payment->getCcExpYear() . $payment->getCcExpMonth();
-            $billingAddress = $order->getBillingAddress();
             $azpay->config_billing['customerIdentity'] = $order->getCustomerTaxvat();
             $azpay->config_billing['name'] = $order->getCustomerName();
             $azpay->config_billing['address'] = $billingAddress->getStreet(1);
@@ -74,46 +77,81 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
             $azpay->config_billing['phone'] = $billingAddress->getTelephone();
             $azpay->config_billing['email'] = $order->getCustomerEmail();
 
+            //Authorize method
             if ($requestType == "authorize") {
-                $azpay->config_options['fraud'] = "true";
-                $costumerIP = $payment->getAdditionalInformation('customer_ip');
-                $azpay->config_options['costumerIP'] = $costumerIP;
+
+                //Fraud config
                 $phoneData = Mage::helper('azpay')->splitTelephone($billingAddress->getTelephone());
+                $costumerIP = $payment->getAdditionalInformation('customer_ip');
+                $azpay->config_options['fraud'] = "true";
+                $azpay->config_options['costumerIP'] = $costumerIP;
                 $azpay->config_billing['phonePrefix'] = $phoneData['ddd'];
                 $azpay->config_billing['phoneNumber'] = $phoneData['number'];
+
                 foreach ($order->getItemsCollection() as $_item) {
-                    /* @var $_item Mage_Sales_Model_Quote_Item */
                     $azpay->config_product['productName'] = $_item->getProduct()->getName();
                     $azpay->config_product['quantity'] = $_item->getQtyOrdered();
                     $azpay->config_product['price'] = $_item->getProduct()->getFinalPrice($_item->getQtyOrdered());
                 }
-                // Execute Authorization - Prepare authorization to transaction
-                $azpay->authorize()->execute();
 
-                $azpay->getXml(); // usado para salvar o XML gerado no log
-            } elseif ($requestType == "authorize_capture") {
-                // Execute Sale - Prepare authorization and capture (direct sale), to transaction
-                $azpay->sale()->execute();
+                //Prepare authorization to transaction
+                $operation = $azpay->authorize();
+                //XML to save in log
+                $azpay->getXml();
+
             }
 
+            //Sale method
+            if ($requestType == "authorize_capture") {
+                //Prepare authorization to direct sale
+                $operation = $azpay->sale();
+            }
+
+            //Log
             if ($this->getConfigData('log')) {
                 Mage::log($azpay, null, "azpay_cc.log");
             }
+
+            //Execute operation
+            $operation->execute();
+
         } catch (AZPay_Error $e) {
-            Mage::log($e->getMessage(), null, "azpay_cc_error.log");
-            $error = $azpay->responseError();
-            return Mage::throwException("Ocorreu um problema com o seu pedido. Tente novamente ou entre em contato conosco informando este código: " . $error['status_message']);
+
+          # HTTP 409 - AZPay Error
+          $error = $azpay->responseError();
+          $response_message = $error['error_message'];
+          Mage::log($e->getMessage(), null, "azpay_cc_error.log");
+          return Mage::throwException("Ocorreu um erro com o seu pagamento: " . $response_message);
+
+        } catch (AZPay_Curl_Exception $e) {
+
+          # Connection Error
+          $response_message = $e->getMessage();
+          return Mage::throwException("Ocorreu um erro com o seu pagamento: " . $response_message);
+
+        } catch (AZPay_Exception $e) {
+
+          # General Error
+          $response_message = $e->getMessage();
+          return Mage::throwException("Ocorreu um erro com o seu pagamento: " . $response_message);
+
         }
 
-        // Response
+        //Response AZPay
         $gateway_response = $azpay->response();
 
-        if (!isset($gateway_response)) {
-            // return Mage::throwException('Pagamento não Autorizado');
+        //Check response return
+        if ( !isset($gateway_response) ) {
+            return Mage::throwException("Ocorreu um erro com a resposta do pagamento");
         }
 
-        if ($gateway_response->status != Config::$STATUS['APPROVED']) {
-          //  return Mage::throwException('Pagamento não Autorizado');
+        $response_status = intval($gateway_response->status);
+        $response_message = Config::$STATUS_MESSAGES[$response_status]['title'];
+
+        if ( $response_status == Config::$STATUS['AUTHORIZED'] || $response_status == Config::$STATUS['APPROVED'] ) {
+
+        } else {
+            return Mage::throwException("Ocorreu um erro com o seu pagamento: " . $response_message);
         }
 
         // azpay info
