@@ -8,7 +8,7 @@ class Wemage_Azpay_Transaction_CcController extends Mage_Core_Controller_Front_A
         $request = $this->getRequest();
 
         if ( isset($_GET['TransactionID']) && !empty($_GET['TransactionID']) ) {
-					
+
         	$callback = array(
 						'tid' 			  => $_POST['TID'],
 						'order_reference' => $_POST['order_reference'],
@@ -21,17 +21,17 @@ class Wemage_Azpay_Transaction_CcController extends Mage_Core_Controller_Front_A
 					$order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
 
 					if ($callback['status'] == '6') {
-						$order->setData('state', "canceled");
-				    $order->setStatus("canceled");
+						$order->setState('canceled', true);
 						$history = $order->addStatusHistoryComment('AZPay: Transação cancelada.', false);
 				    $history->setIsCustomerNotified(false);
 				    $order->save();
 					}
 
 					if ($callback['status'] == '8') {
-						$order->setData('state', "complete");
-				    $order->setStatus("complete");
+            $order->setState('processing', true);
 				    $history = $order->addStatusHistoryComment('AZPay: Transação capturada.', false);
+            $amount = $order->getGrandTotal();
+            $order->setTotalPaid($amount);
 				    $history->setIsCustomerNotified(false);
 		        $order->save();
 					}
