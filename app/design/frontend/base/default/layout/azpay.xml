@@ -7,12 +7,13 @@
             <action method="addCss" ifconfig="payment/azpay_cc/active">
                 <stylesheet>azpay/css/styles.css</stylesheet>
             </action>
-            <!--
+            <action method="addCss" ifconfig="payment/azpay_boleto/active">
+                <stylesheet>azpay/css/styles.css</stylesheet>
+            </action>
             <action method="addItem" ifconfig="payment/azpay_cc/active">
                 <type>skin_js</type>
                 <name>azpay/js/validation.js</name>
             </action>
-            -->
         </reference>
     </azpay_checkout_handle>
 

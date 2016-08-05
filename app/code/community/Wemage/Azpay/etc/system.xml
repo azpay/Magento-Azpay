@@ -52,16 +52,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </active>
-                        <!--
-                        <description translate="label">
-                            <label>Description</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>15</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description>
-                        -->
                         <operator translate="label">
                             <label>Operators</label>
                             <frontend_type>select</frontend_type>
@@ -80,16 +70,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </order_status>
-                        <!--
-                        <instructions translate="label">
-                            <label>Instructions</label>
-                            <frontend_type>textarea</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </instructions>
-                        -->
                         <days_to_expire translate="label">
                             <label>Days to expire</label>
                             <frontend_type>text</frontend_type>
@@ -170,58 +150,12 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </payment_action>
-                        <acquirer translate="label">
-                            <label>Acquirer</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>azpay/source_acquirer</source_model>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </acquirer>
 
-                        <cctypes translate="label">
-                            <label>Credit Card Types</label>
-                            <frontend_type>multiselect</frontend_type>
-                            <source_model>azpay/source_cctypes</source_model>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </cctypes>
-
-                        <max_installments translate="label">
-                            <label>Maximum Number of Installments</label>
-                            <frontend_type>text</frontend_type>
-                            <validate>required-entry validate-number</validate>
-                            <sort_order>60</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </max_installments>
-                        <min_installment_value translate="label">
-                            <label>Minimum Installment Value</label>
-                            <frontend_type>text</frontend_type>
-                            <validate>required-entry validate-number</validate>
-                            <sort_order>70</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </min_installment_value>
-                        <free_installments translate="label">
-                            <label>Free Installments</label>
-                            <frontend_type>text</frontend_type>
-                            <frontend_class>validate-number</frontend_class>
-                            <sort_order>90</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </free_installments>
                         <log translate="label">
                             <label>Gerar Log</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>100</sort_order>
+                            <sort_order>41</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -229,12 +163,316 @@
                         <sort_order translate="label">
                             <label>Sort Order</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>110</sort_order>
+                            <sort_order>42</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                             <frontend_class>validate-number</frontend_class>
                         </sort_order>
+
+                        <heading_visa translate="label">
+                           <label>Visa</label>
+                           <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                           <sort_order>51</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>0</show_in_store>
+                        </heading_visa>
+
+                        <acquirer_visa translate="label">
+                            <label>Acquirer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>azpay/source_acquirer</source_model>
+                            <sort_order>52</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </acquirer_visa>
+
+                        <min_installment_value_visa translate="label">
+                            <label>Minimum Installment Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>53</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </min_installment_value_visa>
+
+                        <max_installments_visa translate="label">
+                          <label>Maximum Number of Installments</label>
+                          <frontend_type>select</frontend_type>
+                          <source_model>azpay/source_parcels</source_model>
+                          <sort_order>54</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                        </max_installments_visa>
+
+                        <heading_mastercard translate="label">
+                           <label>Mastercard</label>
+                           <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                           <sort_order>55</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>0</show_in_store>
+                        </heading_mastercard>
+
+                        <acquirer_mastercard translate="label">
+                            <label>Acquirer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>azpay/source_acquirer</source_model>
+                            <sort_order>56</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </acquirer_mastercard>
+
+                        <min_installment_value_mastercard translate="label">
+                            <label>Minimum Installment Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>57</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </min_installment_value_mastercard>
+
+                        <max_installments_mastercard translate="label">
+                          <label>Maximum Number of Installments</label>
+                          <frontend_type>select</frontend_type>
+                          <source_model>azpay/source_parcels</source_model>
+                          <sort_order>58</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                        </max_installments_mastercard>
+
+                        <heading_amex translate="label">
+                           <label>Amex</label>
+                           <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                           <sort_order>59</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>0</show_in_store>
+                        </heading_amex>
+
+                        <acquirer_amex translate="label">
+                            <label>Acquirer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>azpay/source_acquirer</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </acquirer_amex>
+
+                        <min_installment_value_amex translate="label">
+                            <label>Minimum Installment Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>61</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </min_installment_value_amex>
+
+                        <max_installments_amex translate="label">
+                          <label>Maximum Number of Installments</label>
+                          <frontend_type>select</frontend_type>
+                          <source_model>azpay/source_parcels</source_model>
+                          <sort_order>62</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                        </max_installments_amex>
+
+                        <heading_diners translate="label">
+                           <label>Diners</label>
+                           <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                           <sort_order>63</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>0</show_in_store>
+                        </heading_diners>
+
+                        <acquirer_diners translate="label">
+                            <label>Acquirer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>azpay/source_acquirer</source_model>
+                            <sort_order>64</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </acquirer_diners>
+
+                        <min_installment_value_diners translate="label">
+                            <label>Minimum Installment Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </min_installment_value_diners>
+
+                        <max_installments_diners translate="label">
+                          <label>Maximum Number of Installments</label>
+                          <frontend_type>select</frontend_type>
+                          <source_model>azpay/source_parcels</source_model>
+                          <sort_order>66</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                        </max_installments_diners>
+
+                        <heading_discover translate="label">
+                           <label>Discover</label>
+                           <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                           <sort_order>67</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>0</show_in_store>
+                        </heading_discover>
+
+                        <acquirer_discover translate="label">
+                            <label>Acquirer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>azpay/source_acquirer</source_model>
+                            <sort_order>68</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </acquirer_discover>
+
+                        <min_installment_value_discover translate="label">
+                            <label>Minimum Installment Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>69</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </min_installment_value_discover>
+
+                        <max_installments_discover translate="label">
+                          <label>Maximum Number of Installments</label>
+                          <frontend_type>select</frontend_type>
+                          <source_model>azpay/source_parcels</source_model>
+                          <sort_order>70</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                        </max_installments_discover>
+
+                        <heading_elo translate="label">
+                           <label>Elo</label>
+                           <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                           <sort_order>71</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>0</show_in_store>
+                        </heading_elo>
+
+                        <acquirer_elo translate="label">
+                            <label>Acquirer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>azpay/source_acquirer</source_model>
+                            <sort_order>72</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </acquirer_elo>
+
+                        <min_installment_value_elo translate="label">
+                            <label>Minimum Installment Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>73</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </min_installment_value_elo>
+
+                        <max_installments_elo translate="label">
+                          <label>Maximum Number of Installments</label>
+                          <frontend_type>select</frontend_type>
+                          <source_model>azpay/source_parcels</source_model>
+                          <sort_order>74</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                        </max_installments_elo>
+
+                        <heading_aura translate="label">
+                           <label>Aura</label>
+                           <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                           <sort_order>75</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>0</show_in_store>
+                        </heading_aura>
+
+                        <acquirer_aura translate="label">
+                            <label>Acquirer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>azpay/source_acquirer</source_model>
+                            <sort_order>76</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </acquirer_aura>
+
+                        <min_installment_value_aura translate="label">
+                            <label>Minimum Installment Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>77</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </min_installment_value_aura>
+
+                        <max_installments_aura translate="label">
+                          <label>Maximum Number of Installments</label>
+                          <frontend_type>select</frontend_type>
+                          <source_model>azpay/source_parcels</source_model>
+                          <sort_order>78</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                        </max_installments_aura>
+
+                        <heading_jcb translate="label">
+                           <label>JCB</label>
+                           <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                           <sort_order>79</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>0</show_in_store>
+                        </heading_jcb>
+
+                        <acquirer_jcb translate="label">
+                            <label>Acquirer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>azpay/source_acquirer</source_model>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </acquirer_jcb>
+
+                        <min_installment_value_jcb translate="label">
+                            <label>Minimum Installment Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>81</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </min_installment_value_jcb>
+
+                        <max_installments_jcb translate="label">
+                          <label>Maximum Number of Installments</label>
+                          <frontend_type>select</frontend_type>
+                          <source_model>azpay/source_parcels</source_model>
+                          <sort_order>82</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                        </max_installments_jcb>
                     </fields>
                 </azpay_cc>
             </groups>
