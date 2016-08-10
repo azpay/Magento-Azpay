@@ -57,9 +57,12 @@ class Wemage_Azpay_Model_Boleto extends Wemage_Azpay_Model_Api {
         // Response
         $gateway_response = $azpay->response();
 
+        $paymentDetails['azpayboletourl'] = (string)$gateway_response->processor->Boleto->details->urlBoleto;
+        $payment->setAdditionalData(serialize($paymentDetails));
+
         // azpay info
         $payment->setAzpayTransactionId($gateway_response->transactionId)
-                ->setAzpayBoletoUrl($gateway_response->processor->Boleto->details->urlBoleto);
+                ->setAzpayBoletoUrl((string)$gateway_response->processor->Boleto->details->urlBoleto);
 
         return $this;
     }
