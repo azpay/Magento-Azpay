@@ -10,6 +10,16 @@ jQuery(document).ready(function($){
     });
 
     /**
+     * Execute resetinput function on checkout submit
+     */
+    Review.prototype.save = Review.prototype.save.wrap(function(parentMethod) {
+        parentMethod();
+        setTimeout(function(){
+          resetInput();
+        }, 5000);
+    });
+
+    /**
      * Mask for credit card number
      */
     function numberMask() {
@@ -42,6 +52,18 @@ jQuery(document).ready(function($){
         };
     }
 
+    /**
+     * Reset input val
+     */
+    function resetInput() {
+      $('#azpay_cc_cc_type').val('');
+      $('#azpay_cc_installments').val('');
+      $('#azpay_cc_cc_number').val('');
+      $('#azpay_cc_cc_owner').val('');
+      $('#azpay_cc_cc_cid').val('');
+      $('#azpay_cc_cc_exp_month').val('');
+      $('#azpay_cc_cc_exp_year').val('');
+    }
 });
 
 /*
