@@ -13,7 +13,8 @@ class Wemage_Azpay_Model_Source_Acquirer
             array('value' => '22', 'label' => Mage::helper('azpay')->__('GETNET')),
             array('value' => '20', 'label' => Mage::helper('azpay')->__('STONE')),
             array('value' => '24', 'label' => Mage::helper('azpay')->__('GLOBAL PAYMENTS')),
-            array('value' => '25', 'label' => Mage::helper('azpay')->__('BIN'))
+            array('value' => '25', 'label' => Mage::helper('azpay')->__('BIN')),
+            array('value' => '22', 'label' => Mage::helper('azpay')->__('GETNET'))
         );
     }
 
