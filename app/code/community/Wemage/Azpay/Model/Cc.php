@@ -48,6 +48,7 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
         try {
 
             $order = $payment->getOrder();
+
             $billingAddress = $order->getBillingAddress();
             $flag = $payment->getCcType();
             $parcels = $payment->getInstallments();
@@ -79,7 +80,13 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
             $azpay->config_card_payments['cardNumber'] = Mage::helper('core')->decrypt($payment->getCcNumber());
             $azpay->config_card_payments['cardSecurityCode'] = Mage::helper('core')->decrypt($payment->getCcCid());
             $azpay->config_card_payments['cardExpirationDate'] = $payment->getCcExpYear() . $payment->getCcExpMonth();
-            $azpay->config_billing['customerIdentity'] = $order->getCustomerId();
+
+            if ($order->getCustomerId()) {
+              $azpay->config_billing['customerIdentity'] = $order->getCustomerId();
+            } else {
+              $azpay->config_billing['customerIdentity'] = $order->getRealOrderId();
+            }
+
             $azpay->config_billing['name'] = $order->getCustomerName();
             $azpay->config_billing['address'] = $billingAddress->getStreet(1);
             $azpay->config_billing['addressNumber'] = $billingAddress->getStreet(2);

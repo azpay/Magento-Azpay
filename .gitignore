@@ -1,3 +1,10 @@
 node_modules/
 gulpfile.js
 .remote-sync.json
+*
+!*app/code/community/Wemage
+!*app/design/adminhtml/default/default/template/azpay/
+!*app/design/frontend/base/default/template/azpay/
+!app/etc/modules/Wemage_Azpay.xml
+!app/locale/pt_BR/Az_Pay.csv
+!*skin/frontend/base/default/azpay/
