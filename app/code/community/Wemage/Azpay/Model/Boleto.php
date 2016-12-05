@@ -38,8 +38,6 @@ class Wemage_Azpay_Model_Boleto extends Wemage_Azpay_Model_Api {
               $azpay->config_billing['customerIdentity'] = $order->getRealOrderId();
             }
 
-            $azpay->config_billing['customerIdentity'] = $order->getCustomerTaxvat();
-
             $azpay->config_billing['name'] = $order->getCustomerName();
             $azpay->config_billing['address'] = $billingAddress->getStreet(1) . ',' . $billingAddress->getStreet(2);
             $azpay->config_billing['address2'] = $billingAddress->getStreet(3) ? $billingAddress->getStreet(3) : '';
