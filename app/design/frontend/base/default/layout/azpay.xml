@@ -40,7 +40,7 @@
 
     <!-- checkout onepage success handles -->
     <azpay_checkout_success_handle>
-        <reference name="checkout.success">
+        <reference name="content">
             <block type="azpay/checkout_success_payment" name="azpay_checkout_success_payment">
                 <action method="addPaymentRender">
                     <type>azpay_boleto</type>

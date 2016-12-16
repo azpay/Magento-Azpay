@@ -25,11 +25,15 @@ class Wemage_Azpay_Model_Boleto extends Wemage_Azpay_Model_Api {
             $azpay->config_order['reference'] = $order->getRealOrderId();
             $azpay->config_order['totalAmount'] = Mage::helper('azpay')->formatAmount($amount);
             $azpay->config_options['urlReturn'] = Mage::getUrl('azpay/transaction_boleto/postback');
-            $azpay->config_boleto['acquirer'] = $this->getConfigData('operator');
+
+            /*$azpay->config_boleto['acquirer'] = $this->getConfigData('operator');
             $azpay->config_boleto['expire'] = $this->_generateExpirationDate();
             $azpay->config_boleto['nrDocument'] = substr($order->getRealOrderId(), 1);
             $azpay->config_boleto['amount'] = Mage::helper('azpay')->formatAmount($amount);
-            $azpay->config_boleto['instructions'] = $this->getConfigData('instructions');
+            $azpay->config_boleto['instructions'] = $this->getConfigData('instructions');*/
+
+            $azpay->config_online_debit['acquirer'] = $this->getConfigData('operator');
+
             $billingAddress = $order->getBillingAddress();
 
             if ( $order->getCustomerTaxvat() ) {
@@ -49,7 +53,7 @@ class Wemage_Azpay_Model_Boleto extends Wemage_Azpay_Model_Api {
             $azpay->config_options['urlReturn'] = Mage::getUrl('azpay/transaction_boleto/postback');
 
             // Execute
-            $azpay->boleto()->execute();
+            $azpay->online_debit()->execute();
             $azpay->getXml(); // usado para salvar o XML gerado no log
             // Log
             if ($this->getConfigData('log')) {
@@ -63,12 +67,13 @@ class Wemage_Azpay_Model_Boleto extends Wemage_Azpay_Model_Api {
         // Response
         $gateway_response = $azpay->response();
 
-        $paymentDetails['azpayboletourl'] = (string)$gateway_response->processor->Boleto->details->urlBoleto;
+        $paymentDetails['azpayboletourl'] = (string)$gateway_response->processor->Transfer->urlTransfer;
+
         $payment->setAdditionalData(serialize($paymentDetails));
 
         // azpay info
         $payment->setAzpayTransactionId($gateway_response->transactionId)
-                ->setAzpayBoletoUrl((string)$gateway_response->processor->Boleto->details->urlBoleto);
+                ->setAzpayBoletoUrl((string)$gateway_response->processor->Transfer->urlTransfer);
 
         return $this;
     }
