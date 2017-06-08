@@ -52,13 +52,12 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
             $billingAddress = $order->getBillingAddress();
             $flag = $payment->getCcType();
             $parcels = $payment->getInstallments();
-            Mage::log("Parcelas:". $parcels);
+
 
             $parcelMax = Mage::getStoreConfig('payment/azpay_cc/max_installments_'.strtolower($flag).'');
-            Mage::log("ParcelaMax:". $ParcelaMax);
+
 
             $parcelMinValue = ceil(Mage::getStoreConfig('payment/azpay_cc/min_installment_value_'.strtolower($flag).''));
-            Mage::log("ParcelaMin:". $parcelMinValue.' Flag: '.$flag);
 
             $amountTotal = ceil(Mage::helper('azpay')->formatAmount($amount));
             $parcelValue = ceil($amountTotal / $parcels);
@@ -87,7 +86,7 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
             $azpay->config_card_payments['cardSecurityCode'] = Mage::helper('core')->decrypt($payment->getCcCid());
             $azpay->config_card_payments['cardExpirationDate'] = $payment->getCcExpYear() . $payment->getCcExpMonth();
 
-           /* 
+           /*
             Comentando para correção logo a abaixo voltando a versão anterior
            if ($order->getCustomerId()) {
               $azpay->config_billing['customerIdentity'] = $order->getCustomerId();
