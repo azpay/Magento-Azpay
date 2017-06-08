@@ -86,13 +86,12 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
             $azpay->config_card_payments['cardSecurityCode'] = Mage::helper('core')->decrypt($payment->getCcCid());
             $azpay->config_card_payments['cardExpirationDate'] = $payment->getCcExpYear() . $payment->getCcExpMonth();
 
-           /*
-            Comentando para correção logo a abaixo voltando a versão anterior
+
            if ($order->getCustomerId()) {
               $azpay->config_billing['customerIdentity'] = $order->getCustomerId();
             } else {
               $azpay->config_billing['customerIdentity'] = $order->getRealOrderId();
-            }*/
+            }
 
             $azpay->config_billing['customerIdentity'] = $order->getCustomerTaxvat();
 
