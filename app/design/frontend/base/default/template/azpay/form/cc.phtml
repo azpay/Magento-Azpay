@@ -1,3 +1,6 @@
+<?php $subtotal = Mage::helper('checkout/cart')->getQuote()->getSubtotal() ?>
+
+
 <?php $_code = $this->getMethodCode(); ?>
 <ul class="form-list azpay-payment-icons" id="<?php echo $_code ?>_types">
     <?php foreach ($this->getCcAvailableTypes() as $_type): ?>
@@ -14,7 +17,18 @@
             <select id="<?php echo $_code ?>_cc_type" name="payment[cc_type]" title="<?php echo $this->__('Credit Card Type') ?>" class="required-entry validate-select">
                 <option value=""><?php echo $this->__('--Please Select--') ?></option>
                 <?php foreach ($this->getCcAvailableTypes() as $_type): ?>
-                    <option value="<?php echo $_type['value']; ?>" data-parcels="<?php echo Mage::getStoreConfig('payment/azpay_cc/max_installments_'.$_type['value'].''); ?>" data-mask="<?php echo $_type['mask']; ?>"><?php echo $_type['label'] ?></option>
+                    <?php $minimun_value = Mage::getStoreConfig('payment/azpay_cc/min_installment_value_'.$_type['value'].'');
+                        $max_parcelas =Mage::getStoreConfig('payment/azpay_cc/max_installments_'.$_type['value'].'');
+
+                        $parcelas = intval($subtotal/$minimun_value);
+                        if($parcelas > $max_parcelas)
+                            $parcelas = $max_parcelas;
+
+                        if($parcelas < 1)
+                            $parcelas =1;
+                    ?>
+
+                    <option tvalue="<?php echo $_type['value']; ?>" data-parcels="<?php echo intval($parcelas); ?>" data-mask="<?php echo $_type['mask']; ?>"><?php echo $_type['label'] ?></option>
                 <?php endforeach ?>
             </select>
         </div>

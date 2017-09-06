@@ -52,8 +52,13 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
             $billingAddress = $order->getBillingAddress();
             $flag = $payment->getCcType();
             $parcels = $payment->getInstallments();
-            $parcelMax = Mage::getStoreConfig('payment/azpay_cc/max_installments_'.$flag.'');
-            $parcelMinValue = ceil(Mage::getStoreConfig('payment/azpay_cc/min_installment_value_'.$flag.''));
+
+
+            $parcelMax = Mage::getStoreConfig('payment/azpay_cc/max_installments_'.strtolower($flag).'');
+
+
+            $parcelMinValue = ceil(Mage::getStoreConfig('payment/azpay_cc/min_installment_value_'.strtolower($flag).''));
+
             $amountTotal = ceil(Mage::helper('azpay')->formatAmount($amount));
             $parcelValue = ceil($amountTotal / $parcels);
 
@@ -72,7 +77,7 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
             $azpay->config_order['totalAmount'] = Mage::helper('azpay')->formatAmount($amount);
             $azpay->config_options['urlReturn'] = Mage::getUrl('azpay/transaction_cc/postback');
             $azpay->config_card_payments['amount'] = Mage::helper('azpay')->formatAmount($amount);
-            $azpay->config_card_payments['acquirer'] = $this->getConfigData('acquirer_'.$flag.'');
+            $azpay->config_card_payments['acquirer'] = $this->getConfigData('acquirer_'.strtolower($flag).'');
             $azpay->config_card_payments['method'] = ($parcels == '1') ? 1 : 2;
             $azpay->config_card_payments['flag'] = $payment->getCcType();
             $azpay->config_card_payments['numberOfPayments'] = $parcels;
@@ -81,11 +86,14 @@ class Wemage_Azpay_Model_Cc extends Wemage_Azpay_Model_Api {
             $azpay->config_card_payments['cardSecurityCode'] = Mage::helper('core')->decrypt($payment->getCcCid());
             $azpay->config_card_payments['cardExpirationDate'] = $payment->getCcExpYear() . $payment->getCcExpMonth();
 
-            if ($order->getCustomerId()) {
+
+           if ($order->getCustomerId()) {
               $azpay->config_billing['customerIdentity'] = $order->getCustomerId();
             } else {
               $azpay->config_billing['customerIdentity'] = $order->getRealOrderId();
             }
+
+            $azpay->config_billing['customerIdentity'] = $order->getCustomerTaxvat();
 
             $azpay->config_billing['name'] = $order->getCustomerName();
             $azpay->config_billing['address'] = $billingAddress->getStreet(1);
