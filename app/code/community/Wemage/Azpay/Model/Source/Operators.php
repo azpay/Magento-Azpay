@@ -16,6 +16,7 @@ class Wemage_Azpay_Model_Source_Operators
             array('value' => '15','label'=> Mage::helper('azpay')->__('Caixa (Sinco)')),
             array('value' => '16','label'=> Mage::helper('azpay')->__('Caixa (SIGCB)')),
             array('value' => '17','label'=> Mage::helper('azpay')->__('HSBC')),
+            array('value' => '22','label'=> Mage::helper('azpay')->__('PagHiper')),
         );
     }
 

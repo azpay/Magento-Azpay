@@ -26,13 +26,14 @@ class Wemage_Azpay_Model_Boleto extends Wemage_Azpay_Model_Api {
             $azpay->config_order['totalAmount'] = Mage::helper('azpay')->formatAmount($amount);
             $azpay->config_options['urlReturn'] = Mage::getUrl('azpay/transaction_boleto/postback');
 
-            /*$azpay->config_boleto['acquirer'] = $this->getConfigData('operator');
+            $azpay->config_boleto['acquirer'] = $this->getConfigData('operator');
             $azpay->config_boleto['expire'] = $this->_generateExpirationDate();
             $azpay->config_boleto['nrDocument'] = substr($order->getRealOrderId(), 1);
             $azpay->config_boleto['amount'] = Mage::helper('azpay')->formatAmount($amount);
-            $azpay->config_boleto['instructions'] = $this->getConfigData('instructions');*/
+            $azpay->config_boleto['instructions'] = $this->getConfigData('instructions');
+            $azpay->config_boleto['cpf'] = $order->getData('customer_taxvat');
 
-            $azpay->config_online_debit['acquirer'] = $this->getConfigData('operator');
+            //$azpay->config_online_debit['acquirer'] = $this->getConfigData('operator');
 
             $billingAddress = $order->getBillingAddress();
 
@@ -53,7 +54,7 @@ class Wemage_Azpay_Model_Boleto extends Wemage_Azpay_Model_Api {
             $azpay->config_options['urlReturn'] = Mage::getUrl('azpay/transaction_boleto/postback');
 
             // Execute
-            $azpay->online_debit()->execute();
+            $azpay->boleto()->execute();
             $azpay->getXml(); // usado para salvar o XML gerado no log
             // Log
             if ($this->getConfigData('log')) {
