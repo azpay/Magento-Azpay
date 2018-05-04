@@ -28,7 +28,7 @@ class Wemage_Azpay_Transaction_CcController extends Mage_Core_Controller_Front_A
 					}
 
 					if ($callback['status'] == '8') {
-            $order->setState('processing', true);
+            $order->setState('complete', true);
 				    $history = $order->addStatusHistoryComment('AZPay: Transação capturada.', false);
             $amount = $order->getGrandTotal();
             $order->setTotalPaid($amount);
